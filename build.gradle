@@ -16,6 +16,17 @@ apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src']
+        }
+        resources {
+            srcDirs = ['resources']
+        }
+    }
+}
+
 bootJar {
     baseName = 'library'
     version =  '0.1.0'
@@ -30,5 +41,25 @@ targetCompatibility = 1.8
 
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-web")
+    compile("org.springframework.boot:spring-boot-starter-jdbc")
     testCompile('org.springframework.boot:spring-boot-starter-test')
+    compile("org.postgresql:postgresql:42.2.2")
+}
+
+project.ext {
+    dbDriver = 'org.postgresql.Driver'
+    dbUrl = 'jdbc:postgresql://localhost:5432/library'
+    dbUsername = 'postgres'
+    dbPassword = '123'
+}
+
+task initDB << {
+    ant.sql(driver: dbDriver,
+            url: dbUrl,
+            userid: dbUsername,
+            password: dbPassword,
+            encoding: 'UTF-8',
+            classpath: configurations.compile.asPath) {
+        fileset(file: 'db/lib_db.sql')
+    }
 }
