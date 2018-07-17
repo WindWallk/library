@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <alias name="defaultReaderService" alias="readerService"/>
+    <bean id="defaultReaderService" class="com.garov.library.service.reader.impl.DefaultReaderService"/>
+
+    <alias name="defaultPersonService" alias="personService"/>
+    <bean id="defaultPersonService" class="com.garov.library.service.person.impl.DefaultPersonService"/>
+</beans>
