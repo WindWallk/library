@@ -43,11 +43,6 @@ sourceSets {
     }
 }
 
-configurations {
-    integrationTestCompile.extendsFrom testCompile
-    integrationTestRuntime.extendsFrom testRuntime
-}
-
 bootJar {
     baseName = 'library'
     version =  '0.1.0'

@@ -13,7 +13,7 @@ public class Reader extends Human
     private long id;
 
     @NotNull
-    @OneToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @MapsId
     private ReaderCard card;
 

@@ -21,7 +21,7 @@ public class PersonController
     private PersonService personService;
 
     @RequestMapping(method = RequestMethod.PUT)
-    public String createUser(@RequestBody PersonData personData)
+    public String createPerson(@RequestBody PersonData personData)
     {
         return "Person with EGN " + personService.save(personData) + " created!";
     }
