@@ -1,16 +1,15 @@
 package com.garov.library.service.reader.impl;
 
 import com.garov.library.data.ReaderData;
-import com.garov.library.exception.DeleteException;
-import com.garov.library.exception.UpdateException;
 import com.garov.library.exception.WrongSearchParametersException;
 import com.garov.library.model.Reader;
 import com.garov.library.repository.ReaderRepository;
 import com.garov.library.service.reader.ReaderService;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class DefaultReaderService implements ReaderService
 {
@@ -26,91 +25,66 @@ public class DefaultReaderService implements ReaderService
     }
 
     @Override
-    public Reader update(ReaderData readerData) throws UpdateException
+    public Reader update(ReaderData readerData) throws WrongSearchParametersException
     {
-        List<Reader> readersFound;
+        Set<Reader> readersFound = find(readerData);
 
-        try
-        {
-            readersFound = find(readerData);
-        }
-        catch (WrongSearchParametersException ex)
-        {
-            throw new UpdateException("There was no reader found with the information provided. Cannot update.");
-        }
+        oneReaderOnlyValidation(readersFound, "There were multiple readers found with the information provided."
+                + " Please use egn or card cumber to narrow down the search. Cannot update.");
 
-        if (readersFound.size() > 1)
-        {
-            throw new UpdateException("There were multiple readers found with the information provided."
-                    + " Please use egn or card cumber to narrow down the search. Cannot update.");
-        }
-
-        if (readersFound.size() == 0)
-        {
-            throw new UpdateException("No reader found with these parameters. Cannot update.");
-        }
-
-        Reader modifiedReader = readersFound.get(0);
+        Reader modifiedReader = readersFound.iterator().next();
         readerSetModifiedFields(modifiedReader, readerData);
 
         return readerRepository.save(modifiedReader);
     }
 
     @Override
-    public void delete(ReaderData readerData) throws DeleteException
+    public void delete(ReaderData readerData) throws WrongSearchParametersException
     {
-        List<Reader> readersFound;
+        Set<Reader> readersFound = find(readerData);
 
-        try
-        {
-            readersFound = find(readerData);
-        }
-        catch (WrongSearchParametersException ex)
-        {
-            throw new DeleteException("There was no reader found with the information provided. Cannot delete.");
-        }
+        oneReaderOnlyValidation(readersFound, "There were multiple readers found with the information provided."
+                + " Please use egn or card cumber to narrow down the search. Cannot delete.");
 
-        if (readersFound.size() > 1)
-        {
-            throw new DeleteException("There were multiple readers found with the information provided."
-                    + " Please use egn or card cumber to narrow down the search. Cannot delete.");
-        }
-
-        if (readersFound.size() == 0)
-        {
-            throw new DeleteException("No reader found with these parameters. Cannot delete.");
-        }
-
-        Reader readerSetForDeletion = readersFound.get(0);
+        Reader readerSetForDeletion = readersFound.iterator().next();
 
         readerRepository.delete(readerSetForDeletion);
     }
 
     @Override
-    public List<Reader> find(ReaderData readerData) throws WrongSearchParametersException
+    public Set<Reader> find(ReaderData readerData) throws WrongSearchParametersException
     {
         String firstName = readerData.getFirstName();
         String lastName = readerData.getLastName();
         String egn = readerData.getEgn();
         long cardNumber = readerData.getCardNumber();
 
-        List<Reader> readers = new ArrayList<>();
+        Set<Reader> readers = new HashSet<>();
         if (egn != null)
         {
-            readers = readerRepository.findByEgn(egn);
+            Reader readerFoundByEgn = readerRepository.findByEgn(egn);
+            if (readerFoundByEgn != null)
+            {
+                readers.add(readerFoundByEgn);
+            }
         }
 
         if (cardNumber != 0)
         {
-            readers = readerRepository.findAllByCardNumber(cardNumber);
+            Reader readerFoundByCardNumber = readerRepository.findByEgn(egn);
+            if (readerFoundByCardNumber != null)
+            {
+                readers.add(readerFoundByCardNumber);
+            }
+            readers.add(readerRepository.findByCardNumber(cardNumber));
         }
 
         if (firstName != null && lastName != null)
         {
-            readers = readerRepository.findByFirstNameAndLastName(firstName, lastName);
+            readers.addAll(readerRepository.findByFirstNameAndLastName(firstName, lastName));
         }
 
-        if(readers.isEmpty())
+        if (readers.isEmpty())
         {
             throw new WrongSearchParametersException(
                     "There is no search supported with the provided parameters or no results found. Cannot find Reader.");
@@ -122,12 +96,10 @@ public class DefaultReaderService implements ReaderService
     @Override
     public List<Reader> findAll()
     {
-        List<Reader> readers = new ArrayList<>();
-        readers.addAll(readerRepository.findAll());
-        return readers;
+        return readerRepository.findAll();
     }
 
-    protected void readerSetModifiedFields(Reader modifiedReader, ReaderData readerData)
+    private void readerSetModifiedFields(Reader modifiedReader, ReaderData readerData)
     {
         if (readerData.getFirstName() != null)
         {
@@ -140,6 +112,14 @@ public class DefaultReaderService implements ReaderService
         if (readerData.getValidTo() != null)
         {
             modifiedReader.getReaderCard().setValidTo(readerData.getValidTo());
+        }
+    }
+
+    private void oneReaderOnlyValidation(Set<Reader> readersFound, String message) throws WrongSearchParametersException
+    {
+        if (readersFound.size() > 1)
+        {
+            throw new WrongSearchParametersException(message);
         }
     }
 }

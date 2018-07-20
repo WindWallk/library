@@ -1,4 +1,4 @@
-package com.garov.library.service;
+package com.garov.library;
 
 import io.zonky.test.db.AutoConfigureEmbeddedDatabase;
 import org.junit.runner.RunWith;

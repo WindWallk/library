@@ -10,4 +10,7 @@
 
     <alias name="defaultPersonService" alias="personService"/>
     <bean id="defaultPersonService" class="com.garov.library.service.person.impl.DefaultPersonService"/>
+
+    <alias name="defaultBookService" alias="bookService"/>
+    <bean id="defaultBookService" class="com.garov.library.service.book.impl.DefaultBookService"/>
 </beans>

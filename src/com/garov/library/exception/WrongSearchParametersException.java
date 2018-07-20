@@ -1,6 +1,6 @@
 package com.garov.library.exception;
 
-public class WrongSearchParametersException extends RuntimeException
+public class WrongSearchParametersException extends Exception
 {
     public WrongSearchParametersException(String message)
     {

@@ -1,8 +1,8 @@
-package com.garov.library.service;
+package com.garov.library.service.person;
 
 import com.garov.library.data.PersonData;
 import com.garov.library.model.Person;
-import com.garov.library.service.person.PersonService;
+import com.garov.library.IntegrationTest;
 import org.flywaydb.test.annotation.FlywayTest;
 import org.hamcrest.collection.IsIterableContainingInOrder;
 import org.junit.Test;
