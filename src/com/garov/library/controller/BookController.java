@@ -118,7 +118,7 @@ public class BookController
     }
 
     /**
-     * Returns a book
+     * Returns a rented book
      *
      * @param bookData the data used to find and return the book
      * @throws WrongSearchParametersException when there was no book found, or multiple books were found

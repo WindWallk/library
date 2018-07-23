@@ -62,7 +62,7 @@ public interface BookService
     void rentBook(BookData bookData) throws WrongSearchParametersException, RentingException;
 
     /**
-     * Return a book by a Reader
+     * Return a rented book
      *
      * @param bookData the data used to find the book
      * @throws WrongSearchParametersException when there was no book found, or multiple books were found
