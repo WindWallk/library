@@ -27,7 +27,7 @@ public class BookController
      * @param bookData the data used to create a book
      * @return the created book
      */
-    @RequestMapping(method = RequestMethod.PUT)
+    @PutMapping
     public Book createBook(@RequestBody BookData bookData)
     {
         return bookService.save(bookData);
@@ -42,7 +42,7 @@ public class BookController
      * @return the found books
      * @throws WrongSearchParametersException when no book was found
      */
-    @RequestMapping(method = RequestMethod.GET)
+    @GetMapping
     public Set<Book> getBooks(@RequestParam Optional<String> isbn,
             @RequestParam Optional<String> name,
             @RequestParam Optional<String> authorEgn) throws WrongSearchParametersException
@@ -62,7 +62,7 @@ public class BookController
      * @return the updated book
      * @throws WrongSearchParametersException when there was no book found, or multiple books were found with the data provided
      */
-    @RequestMapping(method = RequestMethod.POST)
+    @PostMapping
     public Book updateBook(@RequestBody BookData bookData) throws WrongSearchParametersException
     {
         return bookService.update(bookData);
@@ -72,14 +72,12 @@ public class BookController
      * Deletes a book
      *
      * @param bookData the data used to find and delete the book
-     * @return a message to confirm the deletion of the book
      * @throws WrongSearchParametersException when there was no book found, or multiple books were found with the data provided
      */
-    @RequestMapping(method = RequestMethod.DELETE)
-    public String deleteBook(@RequestBody BookData bookData) throws WrongSearchParametersException
+    @DeleteMapping
+    public void deleteBook(@RequestBody BookData bookData) throws WrongSearchParametersException
     {
         bookService.delete(bookData);
-        return "Book deleted!";
     }
 
     /**
@@ -87,16 +85,14 @@ public class BookController
      *
      * @param bookData the data used to rent the book,
      *                 rentedByCardNumber parameter of bookData will be used to rent the book by a reader
-     * @return a confirmation message that the book was rented
      * @throws WrongSearchParametersException when there was no book found, or multiple books were found with the data provided
      * @throws RentingException               when the reader's card is no longer valid, or no reader card
      *                                        was found, or the book has already been rented
      */
-    @RequestMapping(value = "/rent", method = RequestMethod.POST)
-    public String rentBook(@RequestBody BookData bookData) throws WrongSearchParametersException, RentingException
+    @PostMapping(value = "/rent")
+    public void rentBook(@RequestBody BookData bookData) throws WrongSearchParametersException, RentingException
     {
         bookService.rentBook(bookData);
-        return "Book rented!";
     }
 
     /**
@@ -108,7 +104,7 @@ public class BookController
      * @return (true, Reader) if the book is rented or (false, null) if the book is not
      * @throws WrongSearchParametersException when there was no book found, or multiple books were found
      */
-    @RequestMapping(value = "/rent", method = RequestMethod.GET)
+    @GetMapping(value = "/rent")
     public Pair<Boolean, Reader> isBookRented(@RequestParam Optional<String> isbn,
             @RequestParam Optional<String> name,
             @RequestParam Optional<String> authorEgn) throws WrongSearchParametersException
@@ -125,16 +121,13 @@ public class BookController
      * Returns a book
      *
      * @param bookData the data used to find and return the book
-     * @return a confirmation message that the book was returned
      * @throws WrongSearchParametersException when there was no book found, or multiple books were found
      * @throws RentingException               when the book was not rented
      */
-    @RequestMapping(value = "/return", method = RequestMethod.POST)
-    public String returnBook(@RequestBody BookData bookData) throws WrongSearchParametersException, RentingException
+    @PostMapping(value = "/return")
+    public void returnBook(@RequestBody BookData bookData) throws WrongSearchParametersException, RentingException
     {
         bookService.returnBook(bookData);
-
-        return "Book returned!";
     }
 
     /**
@@ -142,7 +135,7 @@ public class BookController
      *
      * @return all books in the db
      */
-    @RequestMapping(value = "/all", method = RequestMethod.GET)
+    @GetMapping(value = "/all")
     public List<Book> getAllBooks()
     {
         return bookService.findAll();

@@ -38,7 +38,8 @@ public class DefaultBookService implements BookService
         return bookRepository.save(new Book(bookData.getIsbn(), bookData.getName(), author, null));
     }
 
-    @Override public Book update(BookData bookData) throws WrongSearchParametersException
+    @Override
+    public Book update(BookData bookData) throws WrongSearchParametersException
     {
         Set<Book> books = find(bookData);
 
@@ -49,12 +50,14 @@ public class DefaultBookService implements BookService
         return bookRepository.save(modifiedBook);
     }
 
-    @Override public void delete(BookData bookData) throws WrongSearchParametersException
+    @Override
+    public void delete(BookData bookData) throws WrongSearchParametersException
     {
         bookRepository.deleteAll(find(bookData));
     }
 
-    @Override public Set<Book> find(BookData bookData) throws WrongSearchParametersException
+    @Override
+    public Set<Book> find(BookData bookData) throws WrongSearchParametersException
     {
         Set<Book> books = new HashSet<>();
 
@@ -83,7 +86,8 @@ public class DefaultBookService implements BookService
         return books;
     }
 
-    @Override public void rentBook(BookData bookData) throws WrongSearchParametersException, RentingException
+    @Override
+    public void rentBook(BookData bookData) throws WrongSearchParametersException, RentingException
     {
         ReaderCard card = readerCardRepository.findByNumber(bookData.getRentedByCardNumber());
 
@@ -112,7 +116,8 @@ public class DefaultBookService implements BookService
         bookRepository.save(bookForRent);
     }
 
-    @Override public void returnBook(BookData bookData) throws WrongSearchParametersException, RentingException
+    @Override
+    public void returnBook(BookData bookData) throws WrongSearchParametersException, RentingException
     {
         Set<Book> books = find(bookData);
 
@@ -131,7 +136,8 @@ public class DefaultBookService implements BookService
         bookRepository.save(bookForReturn);
     }
 
-    @Override public Pair<Boolean, Reader> rentedBy(BookData bookData) throws WrongSearchParametersException
+    @Override
+    public Pair<Boolean, Reader> rentedBy(BookData bookData) throws WrongSearchParametersException
     {
         Set<Book> books = find(bookData);
         Pair<Boolean, Reader> rentedBy;

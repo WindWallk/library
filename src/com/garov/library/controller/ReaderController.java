@@ -24,7 +24,7 @@ public class ReaderController
      * @param readerData the data used to create the reader
      * @return the created reader
      */
-    @RequestMapping(method = RequestMethod.PUT)
+    @PutMapping
     public Reader createReader(@RequestBody ReaderData readerData)
     {
         return readerService.save(readerData);
@@ -38,7 +38,7 @@ public class ReaderController
      * @throws WrongSearchParametersException when no reader was found, or multiple readers ware found
      */
 
-    @RequestMapping(method = RequestMethod.POST)
+    @PostMapping
     public Reader updateReader(@RequestBody ReaderData readerData) throws WrongSearchParametersException
     {
         return readerService.update(readerData);
@@ -54,7 +54,7 @@ public class ReaderController
      * @return all readers found
      * @throws WrongSearchParametersException when no reader was found, or multiple readers ware found
      */
-    @RequestMapping(method = RequestMethod.GET)
+    @GetMapping
     public Set<Reader> getReaders(@RequestParam Optional<String> egn,
             @RequestParam Optional<String> firstName,
             @RequestParam Optional<String> lastName,
@@ -75,11 +75,10 @@ public class ReaderController
      * @return a confirmation message that the reader is deleted
      * @throws WrongSearchParametersException when no reader was found, or multiple readers ware found
      */
-    @RequestMapping(method = RequestMethod.DELETE)
-    public String deleteReader(@RequestBody ReaderData readerData) throws WrongSearchParametersException
+    @DeleteMapping
+    public void deleteReader(@RequestBody ReaderData readerData) throws WrongSearchParametersException
     {
         readerService.delete(readerData);
-        return "Reader deleted!";
     }
 
     /**
@@ -87,7 +86,7 @@ public class ReaderController
      *
      * @return all readers in the db
      */
-    @RequestMapping(value = "/all", method = RequestMethod.GET)
+    @GetMapping(value = "/all")
     public List<Reader> getAllReaders()
     {
         return readerService.findAll();
