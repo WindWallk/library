@@ -9,7 +9,7 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 @MappedSuperclass
-public abstract class Human implements Serializable
+public abstract class AbstractPerson implements Serializable
 {
     @NotNull
     @Pattern(regexp = "^[a-zA-Z]+$")
@@ -25,12 +25,12 @@ public abstract class Human implements Serializable
     @Pattern(regexp = "^[0-9]*$")
     private String egn;
 
-    public Human()
+    public AbstractPerson()
     {
 
     }
 
-    public Human(String firstName, String lastName, String egn)
+    public AbstractPerson(String firstName, String lastName, String egn)
     {
         this.firstName = firstName;
         this.lastName = lastName;

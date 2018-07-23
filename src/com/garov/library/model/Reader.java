@@ -6,7 +6,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "reader")
-public class Reader extends Human
+public class Reader extends AbstractPerson
 {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
